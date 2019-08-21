@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import styles from './Todo.module.css'
 import TodoList from './TodoList'
 import TodosFilter from './TodosFilter'
@@ -8,6 +8,11 @@ const Todo = () => {
 	const [filteredTodos, setFilteredTodos] = useState(null)
 	const [todo, setTodo] = useState('')
 	const [error, setError] = useState('')
+
+	useEffect(() => {
+		const localStorageTodos = JSON.parse(localStorage.getItem('todos'))
+		localStorageTodos && setTodos(localStorageTodos)
+	}, [])
 
 	const onChange = e => {
 		setTodo(e.target.value)
@@ -20,11 +25,14 @@ const Todo = () => {
 		else {
 			const currentId = todos.length ? Math.max(...todos.map(todo => todo.id)) + 1 : 1
 
-			setTodos([...todos, {
+			const todosArray = [...todos, {
 				id: currentId,
 				title: todo,
 				done: false
-			}])
+			}]
+
+			localStorage.setItem('todos', JSON.stringify(todosArray))
+			setTodos(todosArray)
 
 			clearFilter()
 			setTodo('')
@@ -33,15 +41,18 @@ const Todo = () => {
 	}
 
 	const onTodoToggle = id => {
-		setTodos(todos.map(todo => todo.id === id ?
+		const todosArray = todos.map(todo => todo.id === id ?
 			{ ...todo, done: !todo.done }
-			: todo))
+			: todo)
+
+		localStorage.setItem('todos', JSON.stringify(todosArray))
+		setTodos(todosArray)
 	}
 
 	const onTodoDelete = id => {
-		setTodos(
-			todos.filter(todo => todo.id !== id)
-		)
+		const todosArray = todos.filter(todo => todo.id !== id)
+		localStorage.setItem('todos', JSON.stringify(todosArray))
+		setTodos(todosArray)
 	}
 
 	const filterTodos = text => {
