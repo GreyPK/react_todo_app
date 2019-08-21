@@ -1,9 +1,11 @@
 import React, { useState } from 'react'
 import styles from './Todo.module.css'
-import TodoList from './TodoList';
+import TodoList from './TodoList'
+import TodosFilter from './TodosFilter'
 
 const Todo = () => {
 	const [todos, setTodos] = useState([])
+	const [filteredTodos, setFilteredTodos] = useState(null)
 	const [todo, setTodo] = useState('')
 	const [error, setError] = useState('')
 
@@ -11,7 +13,7 @@ const Todo = () => {
 		setTodo(e.target.value)
 	}
 
-	const onTodoAddHandler = () => {
+	const onTodoAdd = () => {
 		if (todo === '') {
 			setError('Please Add some text in todo')
 		}
@@ -24,6 +26,7 @@ const Todo = () => {
 				done: false
 			}])
 
+			clearFilter()
 			setTodo('')
 			setError('')
 		}
@@ -41,17 +44,39 @@ const Todo = () => {
 		)
 	}
 
+	const filterTodos = text => {
+		setFilteredTodos(
+			todos.filter(todo => {
+				const regex = new RegExp(`${text}`, 'gi')
+				return todo.title.match(regex)
+			})
+		)
+	}
 
+	const clearFilter = () => {
+		setFilteredTodos(null)
+	}
+
+	const onSubmit = e => {
+		e.preventDefault()
+		onTodoAdd()
+	}
 
 	return (
 		<div className={styles.todo}>
-			<div className={styles.todoAdding}>
+			<form onSubmit={onSubmit} className={styles.todoAdding}>
 				<input type="text" value={todo} onChange={onChange} className={styles.todoInput} />
-				<button className={styles.todoBtn} onClick={onTodoAddHandler}>Add todo</button>
-			</div>
+				<button type="submit" className={styles.todoBtn}>Add todo</button>
+			</form>
+
+			<TodosFilter filterTodos={filterTodos} clearFilter={clearFilter} filteredTodos={filteredTodos} />
 
 			<div className={styles.todoError}>{error}</div>
-			<TodoList todos={todos} onTodoToggle={onTodoToggle} onTodoDelete={onTodoDelete} />
+			{filteredTodos ?
+				<TodoList todos={filteredTodos} onTodoToggle={onTodoToggle} onTodoDelete={onTodoDelete} />
+				:
+				<TodoList todos={todos} onTodoToggle={onTodoToggle} onTodoDelete={onTodoDelete} />
+			}
 		</div >
 	)
 }
