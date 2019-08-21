@@ -1,0 +1,52 @@
+.todo {
+	max-width: 100%;
+	width: 500px;
+	margin: 15px;
+	padding: 15px;
+	border-radius: 3px;
+	box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.12), 0 1px 5px 0 rgba(0, 0, 0, 0.2);
+}
+
+.todoAdding {
+	display: flex;
+	margin-bottom: 10px;
+}
+
+.todoInput {
+	font-size: 18px;
+	flex-grow: 1;
+}
+
+.todoError {
+	color: red;
+}
+
+.todoBtn {
+	margin: 5px;
+	padding: 5px 10px;
+	border: none;
+	font-size: 18px;
+	color: #fff;
+	background-color: #26a69a;
+}
+
+.todoTitle {
+	font-size: 20px;
+}
+
+.todoTitleDone {
+	text-decoration: line-through;
+}
+
+.todoItem {
+	margin-bottom: 5px;
+}
+
+.todoDelete {
+	margin: 5px;
+	padding: 5px 10px;
+	border: none;
+	font-size: 16px;
+	color: #fff;
+	background-color: #ccc;
+}
